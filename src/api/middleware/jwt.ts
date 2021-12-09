@@ -7,7 +7,10 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
 
    const token = req.cookies.token
 
-   if (!token) return res.status(401).json({ message: 'you must be logged in' })
+   if (!token) {
+      logging.warn('Token is null, unauthorized ...')
+      return res.status(401).json({ message: 'you must be logged in' })
+   }
 
    try {
       jwt.verify(
