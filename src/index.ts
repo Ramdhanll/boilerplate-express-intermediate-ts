@@ -12,13 +12,14 @@ const app = express()
 app.use(
    cors({
       credentials: true,
-      origin: ['*', 'http://localhost:3000', 'http://localhost'],
+      // origin: ['*', 'http://localhost:3000', 'http://localhost'],
+      origin: 'http://localhost:3000',
    })
 )
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
 app.use(cookieParser())
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // Connect to Mongo
 mongoose
@@ -41,25 +42,6 @@ app.use((req, res, next) => {
          `METHOD: '${req.method}' URL: '${req.url}' - IP: '${req.socket.remoteAddress}' - STATUS: '${req.statusCode}' `
       )
    })
-
-   next()
-})
-
-// API Access Policies
-app.use((req, res, next) => {
-   res.header('Access-Control-Allow-Origin', '*')
-   res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-   )
-
-   if (req.method === 'OPTIONS') {
-      res.header(
-         'Access-Control-Allow-Methods',
-         'PUT, POST, PATCH, DELETE, GET'
-      )
-      return res.status(200).json({})
-   }
 
    next()
 })
