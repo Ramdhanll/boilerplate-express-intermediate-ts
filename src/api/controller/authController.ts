@@ -5,7 +5,6 @@ import { validationResult } from 'express-validator'
 import { generateToken } from '../helpers/jwt'
 import bcrypt from 'bcrypt'
 import logging from '../../config/logging'
-import { IGetUserAuthInfoRequest } from '../../interfaces/IGetUserAuthInfoRequest'
 
 export const seed = async (req: Request, res: Response) => {
    logging.info('Incoming seed users')
@@ -80,12 +79,14 @@ export const register = async (req: Request, res: Response) => {
 
    const createdUser = await user.save()
    res.status(200).json({
-      _id: createdUser._id,
-      name: createdUser.name,
-      email: createdUser.email,
-      photo: createdUser.photo,
-      gender: createdUser.gender,
-      token: generateToken(createdUser),
+      user: {
+         _id: createdUser._id,
+         name: createdUser.name,
+         email: createdUser.email,
+         photo: createdUser.photo,
+         gender: createdUser.gender,
+         token: generateToken(createdUser),
+      },
    })
 }
 
@@ -94,18 +95,32 @@ export const logout = async (req: Request, res: Response) => {
    res.send({ success: true })
 }
 
-export const status = async (req: IGetUserAuthInfoRequest, res: Response) => {
-   res.status(200).json({
-      status: 'success',
-      user: {
-         _id: req.user._id,
-         name: req.user.name,
-         email: req.user.email,
-         photo: req.user.photo,
-         gender: req.user.gender,
-      },
-      message: 'status login',
-   })
+export const validate = async (req: Request, res: Response) => {
+   logging.info('Incoming validate users')
+
+   try {
+      const user = await Users.findById(res.locals.user._id)
+
+      if (user) {
+         logging.info('user logged')
+
+         return res.status(200).json({
+            user: {
+               _id: user._id,
+               name: user.name,
+               email: user.email,
+               photo: user.photo,
+               gender: user.gender,
+               token: generateToken(user),
+            },
+         })
+      } else {
+         return res.status(401).json({ message: 'user not found' })
+      }
+   } catch (error) {
+      logging.error(error)
+      return res.status(500).json({ error })
+   }
 }
 
 /**

@@ -1,5 +1,11 @@
 import express from 'express'
-import { login, seed, register, logout } from '../controller/authController'
+import {
+   login,
+   seed,
+   register,
+   logout,
+   validate,
+} from '../controller/authController'
 import { body } from 'express-validator'
 import { isAuth } from '../middleware/jwt'
 import Users from '../models/userModel'
@@ -29,5 +35,6 @@ router.post(
 )
 
 router.post('/logout', isAuth, logout)
+router.get('/validate', isAuth, validate)
 
 export default router
