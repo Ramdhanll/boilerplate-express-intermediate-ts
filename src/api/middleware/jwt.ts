@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import logging from '../../config/logging'
-import { IGetUserAuthInfoRequest } from '../../interfaces/IGetUserAuthInfoRequest'
 
 export const isAuth = (req: Request, res: Response, next: NextFunction) => {
    logging.info('Validating jwt token ...')
@@ -31,12 +30,8 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
    }
 }
 
-export const isAdmin = (
-   req: IGetUserAuthInfoRequest,
-   res: Response,
-   next: NextFunction
-) => {
-   if (req.user && req.user.isAdmin) {
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+   if (res.locals.user && res.locals.user.isAdmin) {
       next()
    } else {
       res.status(401).json({ message: 'Invalid admin token' })
