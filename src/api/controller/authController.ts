@@ -5,6 +5,7 @@ import { validationResult } from 'express-validator'
 import { generateToken } from '../helpers/jwt'
 import bcrypt from 'bcrypt'
 import logging from '../../config/logging'
+import IUser from '../../interfaces/IUser'
 
 export const seed = async (req: Request, res: Response) => {
    logging.info('Incoming seed users')
@@ -33,6 +34,7 @@ export const login = async (req: Request, res: Response) => {
             email: user.email,
             photo: user.photo,
             gender: user.gender,
+            isAdmin: user.isAdmin,
          })
          if (bcrypt.compareSync(password, user.password)) {
             return res
@@ -55,7 +57,7 @@ export const login = async (req: Request, res: Response) => {
       }
    } catch (error: any) {
       logging.error(error)
-      res.status(500).json({
+      res.status(422).json({
          status: 'error',
          errors: [{ msg: error?.name === 'CastError' ? error.message : error }],
          message: error,

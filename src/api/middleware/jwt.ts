@@ -6,7 +6,6 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
    logging.info('Validating jwt token ...')
 
    const token = req.cookies.token
-
    if (!token) {
       logging.warn('Token is null, unauthorized ...')
       return res.status(401).json({ message: 'you must be logged in' })
@@ -22,6 +21,7 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
                return res.status(401).json({ message: 'Invalid token', err })
             }
 
+            logging.info('Token valid ...')
             res.locals.user = decoded
             next()
          }
@@ -34,6 +34,7 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
 }
 
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+   console.log('RES', res.locals)
    if (res.locals.user && res.locals.user.isAdmin) {
       next()
    } else {

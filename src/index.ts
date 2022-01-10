@@ -5,7 +5,11 @@ import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { authRouter, userRouter } from './api/routes/'
+import swaggerUI from 'swagger-ui-express'
+import apiDocs from './apiDocs.json'
+import dotenv from 'dotenv'
 
+dotenv.config()
 const app = express()
 
 // Middleware
@@ -49,6 +53,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', authRouter)
 app.use('/api/users', userRouter)
+app.use('/', swaggerUI.serve, swaggerUI.setup(apiDocs))
 
 // Error Handling
 app.use((req, res, next) => {

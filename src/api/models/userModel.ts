@@ -7,7 +7,7 @@ interface IUserModel extends Document {
    email: string
    password: string
    isAdmin: boolean
-   gender: string
+   gender: 'L' | 'P'
 }
 
 const UserSchema = new Schema<IUserModel>(
@@ -32,6 +32,10 @@ const UserSchema = new Schema<IUserModel>(
          type: Boolean,
          required: true,
          default: false,
+      },
+      gender: {
+         type: String,
+         enum: ['L', 'P'],
       },
    },
    {
