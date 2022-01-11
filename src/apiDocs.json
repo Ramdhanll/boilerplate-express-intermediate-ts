@@ -119,6 +119,11 @@
             "summary": "Get all users",
             "description": "API untuk mengambil data users",
             "produces": "application/json",
+            "security": [
+               {
+                  "cookieAuth": []
+               }
+            ],
             "parameters": [
                {
                   "in": "query",
@@ -193,6 +198,29 @@
          }
       },
       "/api/users/{id}": {
+         "get": {
+            "tags": ["Users"],
+            "summary": "Get user",
+            "description": "Get user by id",
+            "operationId": "getUser",
+            "parameters": [
+               {
+                  "in": "path",
+                  "name": "id",
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful operation"
+               },
+               "404": {
+                  "description": "User not found"
+               }
+            }
+         },
          "put": {
             "tags": ["Users"],
             "summary": "Update user",

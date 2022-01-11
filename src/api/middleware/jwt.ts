@@ -34,10 +34,11 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
 }
 
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
-   console.log('RES', res.locals)
    if (res.locals.user && res.locals.user.isAdmin) {
+      logging.info('Valid admin token')
       next()
    } else {
+      logging.error('Invalid admin token')
       res.status(401).json({ message: 'Invalid admin token' })
    }
 }

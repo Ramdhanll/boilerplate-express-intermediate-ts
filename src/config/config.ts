@@ -12,7 +12,7 @@ const config = {
    },
    server: {
       host: `localhost`,
-      port: 5000,
+      port: process.env.PORT || 5000,
    },
 }
 

@@ -2,6 +2,7 @@ import express from 'express'
 import {
    createUser,
    deleteUser,
+   getUser,
    getUsers,
    updateUser,
 } from '../controller/userController'
@@ -16,7 +17,8 @@ const uploadMulter = multer({ storage })
 
 const router = express.Router()
 
-router.get('/', getUsers)
+router.get('/', isAuth, getUsers)
+router.get('/:id', getUser)
 router.post(
    '/',
    uploadMulter.single('photo'),

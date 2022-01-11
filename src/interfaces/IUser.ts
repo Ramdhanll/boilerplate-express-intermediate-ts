@@ -4,6 +4,6 @@ export default interface IUser {
    photo?: string
    email: string
    password: string
-   isAdmin: boolean
+   isAdmin?: boolean
    gender: string
 }

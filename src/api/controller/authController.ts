@@ -6,6 +6,7 @@ import { generateToken } from '../helpers/jwt'
 import bcrypt from 'bcrypt'
 import logging from '../../config/logging'
 import IUser from '../../interfaces/IUser'
+import { SALT } from '../../config/jwt'
 
 export const seed = async (req: Request, res: Response) => {
    logging.info('Incoming seed users')
@@ -76,7 +77,7 @@ export const register = async (req: Request, res: Response) => {
    const user = new Users({
       name,
       email,
-      password: bcrypt.hashSync(password, 8),
+      password: bcrypt.hashSync(password, SALT),
    })
 
    const createdUser = await user.save()

@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt'
+import { SALT } from '../config/jwt'
 import IUser from '../interfaces/IUser'
 
-const salt = bcrypt.genSaltSync(8)
+const salt = bcrypt.genSaltSync(SALT)
 
 export const usersDummy: IUser[] = [
    {

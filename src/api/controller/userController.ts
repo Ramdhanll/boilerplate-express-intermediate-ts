@@ -3,6 +3,7 @@ import logging from '../../config/logging'
 import bcrypt from 'bcrypt'
 import Users from '../models/userModel'
 import { validationResult } from 'express-validator'
+import { SALT } from '../../config/jwt'
 
 export const getUsers = async (req: Request, res: Response) => {
    logging.info(`Incoming read all`)
@@ -47,6 +48,16 @@ export const getUsers = async (req: Request, res: Response) => {
    }
 }
 
+export const getUser = async (req: Request, res: Response) => {
+   try {
+      const user = await Users.findById(req.params.id)
+      if (!user) throw 'User not found'
+      return res.status(200).json({ user })
+   } catch (error) {
+      return res.status(404).json({ message: 'User not found' })
+   }
+}
+
 export const createUser = async (req: Request, res: Response) => {
    const errors = validationResult(req)
    if (!errors.isEmpty()) {
@@ -59,11 +70,11 @@ export const createUser = async (req: Request, res: Response) => {
       const user = new Users({
          ...req.body,
          photo: `${process.env.SERVER_URI}/uploads/${req.file?.filename}`,
-         password: bcrypt.hashSync(password, 8),
+         password: bcrypt.hashSync(password, SALT),
       })
 
       const createdUser = await user.save()
-      res.status(200).json({ user: createdUser })
+      res.status(201).json({ user: createdUser })
    } catch (error) {
       res.status(500).json({ message: 'Failed create user', error })
    }
