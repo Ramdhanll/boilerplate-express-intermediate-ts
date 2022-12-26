@@ -9,6 +9,8 @@ dotenv.config()
 const app = createServer()
 
 // Connect to Mongo
+mongoose.set('strictQuery', false)
+
 mongoose
    .connect(config.mongo.url, config.mongo.options)
    .then(() => {

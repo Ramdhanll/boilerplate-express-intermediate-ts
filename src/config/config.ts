@@ -8,11 +8,11 @@ const config = {
          autoIndex: false,
          retryWrites: false,
       },
-      url: 'mongodb://localhost/name-database',
+      url: 'mongodb://localhost/kaysan',
    },
    server: {
       host: `localhost`,
-      port: process.env.PORT || 5000,
+      port: process.env.PORT || 5001,
    },
 }
 
